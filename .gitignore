@@ -1,12 +1,23 @@
-# .NET
-**/bin/
-**/obj/
-**/.vs/
-*.user
+# Node modules (frontend)
+FrontEnd/**/node_modules/
+FrontEnd/**/.angular/
+FrontEnd/**/dist/
 
-# Angular
-**/node_modules/
-**/.angular/
+# Backend
+ECommerceApi/**/bin/
+ECommerceApi/**/obj/
+ECommerceApi/**/.vs/
+ECommerceApi/**/.user
 
-# Env / Secrets
-**/appsettings.Development.json
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+*.log
+*.bak
+ECommerceApi.bak
