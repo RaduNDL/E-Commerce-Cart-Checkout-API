@@ -1,0 +1,12 @@
+# .NET
+**/bin/
+**/obj/
+**/.vs/
+*.user
+
+# Angular
+**/node_modules/
+**/.angular/
+
+# Env / Secrets
+**/appsettings.Development.json
