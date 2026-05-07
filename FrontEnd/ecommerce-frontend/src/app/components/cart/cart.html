@@ -1,0 +1,35 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Shopping Cart</h2>
+  @if (cartService.items.length === 0) {
+    <div class="alert alert-info">Your cart is empty. <a routerLink="/products">Browse products</a></div>
+  } @else {
+    <table class="table align-middle">
+      <thead><tr>
+        <th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th></th>
+      </tr></thead>
+      <tbody>
+        @for (item of cartService.items; track item.product.id) {
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.product.price | currency }}</td>
+            <td style="width:120px">
+              <input type="number" class="form-control form-control-sm" [value]="item.quantity"
+                     min="1" (change)="updateQty(item.product.id, $event)" />
+            </td>
+            <td>{{ (item.product.price * item.quantity) | currency }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger"
+                      (click)="cartService.removeItem(item.product.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <div class="text-end">
+      <h4>Total: <strong>{{ cartService.totalPrice | currency }}</strong></h4>
+      <a routerLink="/checkout" class="btn btn-success mt-2">Proceed to Checkout</a>
+    </div>
+  }
+</div>

@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+  <a class="navbar-brand" routerLink="/">🛒 ECommerce</a>
+  <div class="ms-auto d-flex align-items-center gap-3">
+    <a routerLink="/products" class="text-white text-decoration-none">Products</a>
+    <a routerLink="/cart" class="text-white text-decoration-none position-relative">
+      <i class="bi bi-cart3 fs-5"></i>
+      @if (cartService.totalCount > 0) {
+        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+          {{ cartService.totalCount }}
+        </span>
+      }
+    </a>
+    @if (authService.isLoggedIn) {
+      <span class="text-white">{{ authService.currentUser?.name }}</span>
+      <button class="btn btn-sm btn-outline-light" (click)="logout()">Logout</button>
+    } @else {
+      <a routerLink="/login" class="btn btn-sm btn-outline-light">Login</a>
+      <a routerLink="/register" class="btn btn-sm btn-light">Register</a>
+    }
+  </div>
+</nav>
