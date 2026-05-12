@@ -46,6 +46,43 @@ export class CheckoutComponent {
     this.cardCvv = value.replace(/\D/g, '').substring(0, 4);
   }
 
+  private validateCard(): string | null {
+    if (this.cardName.trim().length < 3)
+      return 'Please enter a valid cardholder name (min 3 characters).';
+
+    const digits = this.cardNumber.replace(/\D/g, '');
+    if (digits.length !== 16)
+      return 'Card number must be exactly 16 digits.';
+
+    let sum = 0;
+    for (let i = 0; i < 16; i++) {
+      let digit = parseInt(digits[15 - i]);
+      if (i % 2 === 1) { digit *= 2; if (digit > 9) digit -= 9; }
+      sum += digit;
+    }
+    if (sum % 10 !== 0)
+      return 'Invalid card number.';
+
+    if (this.cardExpiry.length !== 5)
+      return 'Expiry date must be in MM/YY format.';
+
+    const [mm, yy] = this.cardExpiry.split('/');
+    const month = parseInt(mm, 10);
+    const year = 2000 + parseInt(yy, 10);
+    if (month < 1 || month > 12)
+      return 'Invalid expiry month.';
+
+    const now = new Date();
+    const expiry = new Date(year, month, 0);
+    if (expiry < now)
+      return 'Card has expired.';
+
+    if (this.cardCvv.length < 3)
+      return 'CVV must be 3 or 4 digits.';
+
+    return null;
+  }
+
   placeOrder() {
     this.error = '';
 
@@ -62,39 +99,18 @@ export class CheckoutComponent {
       return;
     }
     if (this.paymentMethod === 'card') {
-      if (this.cardName.trim().length < 3) {
-        this.error = 'Please enter a valid cardholder name.';
-        return;
-      }
-      if (this.cardNumber.replace(/\D/g, '').length < 16) {
-        this.error = 'Card number must be 16 digits.';
-        return;
-      }
-      if (this.cardExpiry.length !== 5) {
-        this.error = 'Expiry date must be in MM/YY format.';
-        return;
-      }
-      const month = parseInt(this.cardExpiry.substring(0, 2), 10);
-      if (month < 1 || month > 12) {
-        this.error = 'Invalid expiry month.';
-        return;
-      }
-      if (this.cardCvv.length < 3) {
-        this.error = 'CVV must be 3 or 4 digits.';
-        return;
-      }
+      const cardError = this.validateCard();
+      if (cardError) { this.error = cardError; return; }
     }
 
     this.loading = true;
 
+    // userId scos — backend-ul il ia din JWT
     const payload = {
-      userId: this.authService.currentUser!.userId,
       shippingAddress: this.shippingAddress,
-      paymentMethod: this.paymentMethod,
       items: this.cartService.items.map(i => ({
         productId: i.product.id,
-        quantity: i.quantity,
-        price: i.product.price
+        quantity: i.quantity
       }))
     };
 

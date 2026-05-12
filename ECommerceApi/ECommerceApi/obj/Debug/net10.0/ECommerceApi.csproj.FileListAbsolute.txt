@@ -65,3 +65,5 @@ E:\Project\Quest\ECommerceApi\ECommerceApi\obj\Debug\net10.0\refint\ECommerceApi
 E:\Project\Quest\ECommerceApi\ECommerceApi\obj\Debug\net10.0\ECommerceApi.pdb
 E:\Project\Quest\ECommerceApi\ECommerceApi\obj\Debug\net10.0\ECommerceApi.genruntimeconfig.cache
 E:\Project\Quest\ECommerceApi\ECommerceApi\obj\Debug\net10.0\ref\ECommerceApi.dll
+E:\Project\Quest\ECommerceApi\ECommerceApi\obj\Debug\net10.0\ECommerceApi.sourcelink.json
+E:\Project\Quest\ECommerceApi\ECommerceApi\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

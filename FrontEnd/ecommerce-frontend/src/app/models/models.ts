@@ -31,7 +31,6 @@ export interface AuthResponse {
 }
 
 export interface CheckoutRequest {
-  userId: number;
   shippingAddress: string;
   items: { productId: number; quantity: number }[];
 }

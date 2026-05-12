@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using ECommerceApi.Models;
 using ECommerceApi.Repositories;
 
@@ -15,11 +16,20 @@ public class OrdersController(
     [HttpPost("checkout")]
     public async Task<IActionResult> Checkout(CheckoutDto dto)
     {
+        
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        if (dto.Items == null || dto.Items.Count == 0)
+            return BadRequest(new { message = "Cart is empty." });
+
         decimal total = 0;
         var orderItems = new List<OrderItem>();
 
         foreach (var item in dto.Items)
         {
+            if (item.Quantity <= 0)
+                return BadRequest(new { message = $"Invalid quantity for product {item.ProductId}." });
+
             var product = await productRepo.GetByIdAsync(item.ProductId);
             if (product == null)
                 return BadRequest(new { message = $"Product {item.ProductId} not found." });
@@ -38,7 +48,7 @@ public class OrdersController(
 
         var order = new Order
         {
-            UserId = dto.UserId,
+            UserId = userId,
             ShippingAddress = dto.ShippingAddress,
             TotalPrice = total,
             Items = orderItems
